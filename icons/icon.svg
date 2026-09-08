@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#0f172a"/>
+  <!-- tracé -->
+  <path d="M120 360 C 180 300, 200 240, 260 240 S 340 200, 360 150"
+        fill="none" stroke="#38bdf8" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="120" cy="360" r="20" fill="#22c55e"/>
+  <!-- épingle GPS -->
+  <path d="M360 96 C 316 96, 288 128, 288 168 c 0 52 72 120 72 120 s 72-68 72-120 c 0-40-28-72-72-72z"
+        fill="#ef4444"/>
+  <circle cx="360" cy="166" r="26" fill="#0f172a"/>
+  <!-- drapeau événement -->
+  <g transform="translate(150 150)">
+    <rect x="0" y="0" width="8" height="90" rx="4" fill="#f1f5f9"/>
+    <path d="M8 6 h70 l-16 22 l16 22 h-70 z" fill="#f59e0b"/>
+  </g>
+</svg>
