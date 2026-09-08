@@ -513,9 +513,15 @@ async function openMap(id) {
       iconSize: [26, 26],
       iconAnchor: [13, 26],
     });
+    const coords = `${ev.lat.toFixed(6)}, ${ev.lon.toFixed(6)}`;
+    const eleTxt = (typeof ev.ele === 'number') ? `<br>Altitude : ${Math.round(ev.ele)} m` : '';
     const m = L.marker([ev.lat, ev.lon], { icon })
       .addTo(map)
-      .bindPopup(`<strong>${escapeXml(ev.name)}</strong><br>${fmtDate(ev.time)}`);
+      .bindPopup(
+        `<strong>${escapeXml(ev.name)}</strong><br>${fmtDate(ev.time)}` +
+        `<br>📍 <a href="https://www.openstreetmap.org/?mlat=${ev.lat}&mlon=${ev.lon}#map=18/${ev.lat}/${ev.lon}" target="_blank" rel="noopener">${coords}</a>` +
+        eleTxt
+      );
     mapLayers.push(m);
   }
 
@@ -536,6 +542,44 @@ async function openMap(id) {
     `<span>📍 <strong>${rec.points.length}</strong> points</span>` +
     `<span>🚩 <strong>${rec.events.length}</strong> événements</span>` +
     `<span>🗓 ${fmtDate(rec.startedAt)}</span>`;
+
+  // Liste des points GPS de chaque événement flagué
+  const evBox = $('map-events');
+  if (rec.events.length === 0) {
+    evBox.hidden = true;
+    evBox.innerHTML = '';
+  } else {
+    evBox.hidden = false;
+    const rows = rec.events.map((ev, i) => {
+      const hasPos = ev.lat != null && ev.lon != null;
+      const coords = hasPos ? `${ev.lat.toFixed(6)}, ${ev.lon.toFixed(6)}` : 'position inconnue';
+      const eleTxt = (typeof ev.ele === 'number') ? ` · ${Math.round(ev.ele)} m` : '';
+      const time = new Date(ev.time).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      return `<li class="ev-row" data-idx="${i}"${hasPos ? '' : ' data-nopos="1"'}>
+        <span class="ev-flag">🚩</span>
+        <span class="ev-main">
+          <span class="ev-name">${escapeXml(ev.name)}</span>
+          <span class="ev-coords">${coords}</span>
+        </span>
+        <span class="ev-time">${time}${eleTxt}</span>
+      </li>`;
+    }).join('');
+    evBox.innerHTML = `<div class="ev-head">Événements signalés</div><ul class="ev-list">${rows}</ul>`;
+
+    // Clic sur un événement → centre la carte + ouvre la bulle
+    evBox.querySelectorAll('.ev-row').forEach((row) => {
+      if (row.dataset.nopos) return;
+      row.addEventListener('click', () => {
+        const ev = rec.events[Number(row.dataset.idx)];
+        map.setView([ev.lat, ev.lon], 18, { animate: true });
+        for (const l of mapLayers) {
+          if (l.getLatLng && Math.abs(l.getLatLng().lat - ev.lat) < 1e-9 && Math.abs(l.getLatLng().lng - ev.lon) < 1e-9) {
+            l.openPopup();
+          }
+        }
+      });
+    });
+  }
 
   $('map-actions').hidden = false;
 }

@@ -262,6 +262,46 @@ html, body {
   flex-shrink: 0;
 }
 .map-info strong { color: var(--text); }
+.map-events {
+  background: var(--bg-elev);
+  max-height: 32vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.ev-head {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  padding: 0.6rem 1rem 0.3rem;
+}
+.ev-list { list-style: none; margin: 0; padding: 0 0 0.4rem; }
+.ev-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.ev-row[data-nopos] { cursor: default; opacity: 0.6; }
+.ev-row:active:not([data-nopos]) { background: var(--bg-elev-2); }
+.ev-flag { font-size: 1rem; }
+.ev-main { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.ev-name { font-size: 0.9rem; font-weight: 600; }
+.ev-coords {
+  font-size: 0.78rem;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.ev-time {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
 .map-actions {
   display: flex;
   gap: 0.75rem;
