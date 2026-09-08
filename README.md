@@ -30,7 +30,34 @@ python3 -m http.server 8000
 Sur téléphone, ouvre l'URL en **HTTPS** (ex. via GitHub Pages) puis autorise l'accès
 à la localisation.
 
-## Déploiement (GitHub Pages)
+## Déploiement sur Vercel (recommandé)
+
+C'est un site **statique** (aucun build nécessaire). `vercel.json` est déjà fourni.
+
+### Option A — via le site Vercel (le plus simple)
+
+1. Va sur [vercel.com](https://vercel.com) → **Add New… → Project**
+2. **Import** le dépôt GitHub `gpstraket`
+3. Framework Preset : **Other** — laisse *Build Command* et *Output Directory* **vides**
+   (Root Directory : `./`)
+4. **Deploy** → tu obtiens une URL HTTPS (`https://gpstraket.vercel.app` ou similaire)
+
+Chaque `git push` redéploie automatiquement. Pour déployer cette branche tout de suite,
+tu peux la définir comme *Production Branch* dans **Settings → Git**, ou ouvrir/mergre
+la PR pour déployer depuis `main`.
+
+### Option B — via la CLI Vercel
+
+```bash
+npm i -g vercel
+vercel            # première fois : suit les questions, lie le projet
+vercel --prod     # déploiement en production
+```
+
+> Le GPS exige du HTTPS : l'URL Vercel étant en `https://`, la géolocalisation et
+> l'installation PWA fonctionnent directement sur ton téléphone.
+
+## Déploiement (GitHub Pages, alternative)
 
 1. Repo → **Settings → Pages**
 2. Source : branche voulue, dossier `/root`
